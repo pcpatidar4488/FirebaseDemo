@@ -30,8 +30,7 @@ public class FirbaseDataListActivity extends AppCompatActivity {
     FireBaseDataListAdapter mAdapter;
     RecyclerView.LayoutManager layoutManager;
     ProgressDialog progressDialog;
-    List list;
-    List<Map<String,String>> listMap;
+    List<Map<String,String>> listMap = new ArrayList<>();;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,26 +72,22 @@ public class FirbaseDataListActivity extends AppCompatActivity {
             progressDialog.dismiss();
             finish();
         } else {
-            int i=0;
             for (Map.Entry<String, Object> entry : users.entrySet()) {
                 //Get user map
 
-                listMap = new ArrayList<>();
                 Map map = (Map) entry.getValue();
-               /* Set<String> keyset = map.keySet();
-                for (String key : keyset) {
-                    list = new ArrayList();
+                Set<String> keyset = map.keySet();
+                listMap.add(map);
+               /* for (String key : keyset) {
+
                     if (key.equals("username")) {
-                        //Toast.makeText(this, ""+map.get(key).toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, ""+map.get(key).toString(), Toast.LENGTH_SHORT).show();
 
                     }
                     if (key.equals("password")) {
 
                     }
-
                 }*/
-                listMap.add(map);
-                i++;
             }
             progressDialog.dismiss();
             mRecyclerView.setHasFixedSize(true);

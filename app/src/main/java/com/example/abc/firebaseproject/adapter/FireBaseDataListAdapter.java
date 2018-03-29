@@ -34,7 +34,8 @@ public class FireBaseDataListAdapter extends RecyclerView.Adapter<FireBaseDataLi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        //holder.text1.setText(lisMap.get(position).get("username"));
+        holder.text1.setText(lisMap.get(position).get("username"));
+        holder.text2.setText(lisMap.get(position).get("password"));
         System.out.println("PPPPPPPP "+lisMap.toString());
 
     }

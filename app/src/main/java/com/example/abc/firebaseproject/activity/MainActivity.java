@@ -1,6 +1,7 @@
 package com.example.abc.firebaseproject.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     UserBean userBean;
     EditText userName;
     EditText passWord;
-    Button mSubmit;
+    Button mSubmit,mDataList;
     String user,pass;
 
     @Override
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
          userName = (EditText) findViewById(R.id.userName);
          passWord = (EditText) findViewById(R.id.passWord);
          mSubmit = (Button) findViewById(R.id.submit);
+         mDataList = (Button) findViewById(R.id.dataList);
 
 
         mSubmit.setOnClickListener(new View.OnClickListener() {
@@ -47,28 +49,41 @@ public class MainActivity extends AppCompatActivity {
 
                 user = userName.getText().toString();
                 pass = passWord.getText().toString();
-                userBean = new UserBean(user,pass);
-                userBean.setUsername(user);
-                userBean.setPassword(pass);
-                progressDialog.show();
 
-                databaseReference = FirebaseDatabase.getInstance().getReference(ParameterConstant.ROOT_KEY).child(ParameterConstant.NOTICE);
+                if(!user.equals("") && !pass.equals("")){
 
-                databaseReference.child("" +  SystemClock.currentThreadTimeMillis()).setValue(userBean, new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                        progressDialog.dismiss();
-                        if (databaseError == null) {
-                            Toast.makeText(MainActivity.this, "saved", Toast.LENGTH_SHORT).show();
-                            userName.setText("");
-                            passWord.setText("");
+                    userBean = new UserBean(user,pass);
+                    userBean.setUsername(user);
+                    userBean.setPassword(pass);
+                    progressDialog.show();
+
+                    databaseReference = FirebaseDatabase.getInstance().getReference(ParameterConstant.ROOT_KEY).child(ParameterConstant.NOTICE);
+                    databaseReference.child("" +  SystemClock.currentThreadTimeMillis()).setValue(userBean, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                             progressDialog.dismiss();
-                        } else {
-                            Toast.makeText(MainActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                            if (databaseError == null) {
+                                Toast.makeText(MainActivity.this, "saved", Toast.LENGTH_SHORT).show();
+                                userName.setText("");
+                                passWord.setText("");
+                                progressDialog.dismiss();
+                            } else {
+                                Toast.makeText(MainActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                            // i++;
                         }
-                       // i++;
-                    }
-                });
+                    });
+                }else {
+                    Toast.makeText(MainActivity.this,"please insert username and password", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+        mDataList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),FirbaseDataListActivity.class));
             }
         });
     }
